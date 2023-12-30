@@ -9,7 +9,7 @@
 
 /users/:id -> See User
 /users/logout -> Log Out
-/users/deit -> Edit my profile
+/users/edit -> Edit my profile
 /users/delete -> Delete my profile
 
 /videos/:id -> Watch Video
