@@ -139,7 +139,44 @@ export const finishGithubLogin = async (req, res) => {
   }
 };
 
+export const getEdit = (req, res) => {
+  return res.render("edit-profile", { pageTitle: "Edit Profile" });
+};
+
+export const postEdit = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { name, email, username, location },
+  } = req;
+
+  const emailAndUsernameExists = await User.exists({
+    _id: { $ne: _id },
+    $or: [{ email }, { username }],
+  });
+  if (emailAndUsernameExists) {
+    return res.render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "Exists Username/Email. Change Them.",
+    });
+  }
+
+  const updateUser = await User.findByIdAndUpdate(
+    _id,
+    {
+      name,
+      email,
+      username,
+      location,
+    },
+    { new: true }
+  );
+  req.session.user = updateUser;
+
+  return res.redirect("/users/edit");
+};
+
 // ==========================================================
 
-export const edit = (req, res) => res.send("Edit");
 export const see = (req, res) => res.send("See");
