@@ -21,6 +21,7 @@ export const postJoin = async (req, res) => {
       errorMessage: "This username/email is already taken.",
     });
   }
+
   await User.create({
     name,
     email,
@@ -150,17 +151,6 @@ export const postEdit = async (req, res) => {
     },
     body: { name, email, username, location },
   } = req;
-
-  const emailAndUsernameExists = await User.exists({
-    _id: { $ne: _id },
-    $or: [{ email }, { username }],
-  });
-  if (emailAndUsernameExists) {
-    return res.render("edit-profile", {
-      pageTitle: "Edit Profile",
-      errorMessage: "Exists Username/Email. Change Them.",
-    });
-  }
 
   const updateUser = await User.findByIdAndUpdate(
     _id,
