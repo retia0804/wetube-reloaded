@@ -9,10 +9,11 @@ const userSchema = new mongoose.Schema({
   password: String,
   name: { type: String, required: true },
   location: String,
+  videos: [{ type: mongoose.Schema.ObjectId, ref: "Video" }],
 });
 
 userSchema.pre("save", async function () {
-  if (this.password) {
+  if (this.password && this.isModified("password")) {
     this.password = await bcrpt.hash(this.password, 5);
   }
 });

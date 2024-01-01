@@ -43,6 +43,7 @@ app.use(
 // Middleware
 
 app.use(localsMiddleware);
+app.use("/uploads", express.static("uploads"));
 
 // ==========================================================
 // Router
