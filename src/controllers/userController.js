@@ -152,6 +152,17 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
   } = req;
 
+  const emailAndUsernameExists = await User.exists({
+    _id: { $ne: _id },
+    $or: [{ email }, { username }],
+  });
+  if (emailAndUsernameExists) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "Exists Username/Email. Change Them.",
+    });
+  }
+
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
